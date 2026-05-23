@@ -1,22 +1,20 @@
 # AI Food Calorie System
 
-AI-powered food recognition and calorie estimation system using Computer Vision, Deep Learning, and Vision-Language Models.
+Hệ thống nhận diện món ăn và ước lượng calories bằng AI sử dụng Computer Vision, Deep Learning và Vision-Language Model.
 
-The system analyzes food images and estimates:
+Hệ thống cho phép:
 
-* Food name
-* Portion weight
-* Calories
-* Protein
-* Carbohydrates
-* Fat
+* nhận diện món ăn từ hình ảnh
+* ước lượng khẩu phần (gram)
+* tính toán calories
+* tính toán protein, carbs và fat
 
 ---
 
-# System Architecture
+# Kiến Trúc Hệ Thống
 
 ```text
-User Upload Image
+Người dùng upload ảnh
         ↓
 Frontend (Next.js)
         ↓
@@ -28,7 +26,7 @@ Top Food Predictions
         ↓
 Gemini Vision Portion Estimation
         ↓
-Estimated Weight (grams)
+Estimated Weight (gram)
         ↓
 Nutrition Calculation Engine
         ↓
@@ -39,7 +37,7 @@ Frontend Visualization
 
 ---
 
-# Core Technologies
+# Công Nghệ Sử Dụng
 
 ## Frontend
 
@@ -47,6 +45,7 @@ Frontend Visualization
 * React
 * TypeScript
 * TailwindCSS
+* Framer Motion
 
 ## Backend
 
@@ -61,42 +60,44 @@ Frontend Visualization
 ## Image Processing
 
 * Pillow (PIL)
+* OpenCV
 
 ---
 
-# AI Pipeline
+# AI
 
-## 1. Food Classification
+## 1. Nhận Diện Món Ăn
 
-The uploaded image is processed using an EfficientNet-based CNN model.
+Ảnh món ăn được xử lý bằng mô hình EfficientNet CNN.
 
-The model predicts:
+Model dự đoán:
 
-* food label
+* tên món ăn
 * confidence score
-* top 3 food predictions
+* top 3 predictions
 
-Example:
+Ví dụ:
 
 ```json
 {
   "food": "pizza",
-  "confidence": 0.37
+  "confidence": 0.90
 }
 ```
 
 ---
 
-## 2. Portion Estimation
+## 2. Ước Lượng Khẩu Phần
 
-The food image and top predictions are sent to Gemini Vision API.
+Ảnh món ăn và top predictions được gửi đến Gemini Vision API.
 
-Gemini estimates:
+Gemini sẽ:
 
-* actual food type
-* approximate edible weight (grams)
+* phân tích hình ảnh
+* ước lượng khẩu phần thực tế
+* trả về estimated weight (gram)
 
-Example:
+Ví dụ:
 
 ```json
 {
@@ -107,38 +108,53 @@ Example:
 
 ---
 
-## 3. Nutrition Calculation
+## 3. Tính Toán Calories & Dinh Dưỡng
 
-The backend calculates calories and macronutrients using nutrition data per 100g.
+Backend sử dụng nutrition database để tính toán:
 
-### Calories Formula
+* calories
+* protein
+* carbs
+* fat
+
+dựa trên:
+
+* nutrition per 100g
+* estimated weight
+
+---
+
+# Công Thức Tính Calories
+
+Calories:
 
 Calories = (kcal_per_100g × weight_g) / 100
 
-### Protein Formula
+Protein:
 
 Protein = (protein_per_100g × weight_g) / 100
 
-### Carbohydrates Formula
+Carbohydrates:
 
 Carbs = (carbs_per_100g × weight_g) / 100
 
-### Fat Formula
+Fat:
 
 Fat = (fat_per_100g × weight_g) / 100
 
 ---
 
-# Features
+# Tính Năng Chính
 
-* AI food recognition
-* Portion size estimation
-* Real-time calorie estimation
-* Nutrition analysis dashboard
-* Modern responsive UI
-* Top-3 prediction visualization
-* FastAPI REST API
-* AI-assisted nutrition reasoning
+ 
+
+* Nhận diện món ăn bằng AI
+* Ước lượng khẩu phần ăn
+* Tính toán lượng calo theo thời gian thực
+* Bảng điều khiển phân tích dinh dưỡng
+* Hiển thị Top-3 dự đoán kết quả
+
+  
 
 ---
 
@@ -169,41 +185,41 @@ file
 ```json
 {
   "classifier_result": {
-    "food": "pizza",
-    "confidence": 0.3758,
+    "food": "pho",
+    "confidence": 0.9124,
     "top_3": [
       {
-        "food": "pizza",
-        "confidence": 0.3758
+        "food": "pho",
+        "confidence": 0.9124
       },
       {
-        "food": "banh_trang_nuong",
-        "confidence": 0.3503
+        "food": "bun_bo_hue",
+        "confidence": 0.0541
       },
       {
-        "food": "lasagna",
-        "confidence": 0.2012
+        "food": "hu_tieu",
+        "confidence": 0.0217
       }
     ]
   },
 
   "portion_result": {
-    "food": "pizza",
-    "estimated_weight_g": 320
+    "food": "pho",
+    "estimated_weight_g": 550
   },
 
   "nutrition_result": {
-    "estimated_calories": 851.2,
-    "protein_g": 35.2,
-    "carbs_g": 105.6,
-    "fat_g": 32
+    "estimated_calories": 478.5,
+    "protein_g": 32.4,
+    "carbs_g": 58.7,
+    "fat_g": 12.6
   }
 }
 ```
 
 ---
 
-# Project Structure
+# Cấu Trúc Project
 
 ```text
 ai-food-calorie-system/
@@ -230,40 +246,57 @@ ai-food-calorie-system/
 
 ---
 
-# Installation
+# Yêu Cầu Hệ Thống
 
-## Clone Repository
-
-```bash
-git clone <repository-url>
-cd ai-food-calorie-system
-```
+* Python 3.10 hoặc 3.11
+* Node.js 18+
+* npm
+* Git
+* Gemini API Key
 
 ---
 
-# Backend Setup
+# Cài Đặt Backend
+
+Di chuyển vào backend:
 
 ```bash
 cd backend
+```
 
+Tạo virtual environment:
+
+```bash
 python -m venv venv
+```
 
+Kích hoạt môi trường ảo:
+
+Windows:
+
+```bash
 venv\Scripts\activate
 ```
 
-Install dependencies:
+Linux/macOS:
+
+```bash
+source venv/bin/activate
+```
+
+Cài dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Create `.env` file:
+Tạo file `.env`:
 
 ```env
 GEMINI_API_KEY=your_api_key
 ```
 
-Run backend:
+Chạy backend:
 
 ```bash
 uvicorn app.main:app --reload
@@ -283,13 +316,23 @@ http://127.0.0.1:8000/docs
 
 ---
 
-# Frontend Setup
+# Cài Đặt Frontend
+
+Di chuyển vào frontend:
 
 ```bash
 cd frontend
+```
 
+Cài dependencies:
+
+```bash
 npm install
+```
 
+Chạy frontend:
+
+```bash
 npm run dev
 ```
 
@@ -301,20 +344,44 @@ http://localhost:3000
 
 ---
 
-# Future Improvements
+# Backend Dependencies
 
-* YOLO food detection
-* Food segmentation
-* Depth estimation
-* Volume estimation
-* Nutrition tracking history
-* Mobile application
-* Cloud deployment
+```txt
+fastapi
+uvicorn
+tensorflow
+keras
+numpy
+pillow
+opencv-python
+python-dotenv
+python-multipart
+google-generativeai
+```
 
 ---
 
-# Author
+# Hướng Phát Triển Trong Tương Lai
 
-Phan Minh Thang
-Bui Huynh Tuan Thanh
-Luu Tan Phat
+ 
+
+* Tích hợp YOLOv8 để phát hiện nhiều món ăn
+* Áp dụng Food Segmentation để tách vùng thực phẩm
+* Ước lượng độ sâu và thể tích món ăn
+* Cải thiện độ chính xác tính calo và khẩu phần
+* Lưu lịch sử dinh dưỡng người dùng
+* Phát triển ứng dụng Android/iOS
+* Triển khai hệ thống trên Cloud
+* Hỗ trợ nhận diện món ăn thời gian thực
+* Mở rộng dataset món ăn Việt Nam
+* Tối ưu tốc độ suy luận AI (ONNX/TensorRT)
+
+  
+
+---
+
+# Thành Viên Nhóm
+
+* Lưu Tấn Phát
+* Phan Minh Thắng
+* Bùi Huỳnh Tuấn Thành
