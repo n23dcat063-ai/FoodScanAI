@@ -1,16 +1,11 @@
 # AI Food Calorie System
 
-AI-powered food recognition and calorie estimation system using:
-
-* EfficientNet Food Classifier
-* Gemini Vision API
-* FastAPI Backend
-* Next.js Frontend
+AI-powered food recognition and calorie estimation system using Computer Vision, Deep Learning, and Vision-Language Models.
 
 The system analyzes food images and estimates:
 
 * Food name
-* Portion size
+* Portion weight
 * Calories
 * Protein
 * Carbohydrates
@@ -18,36 +13,33 @@ The system analyzes food images and estimates:
 
 ---
 
-# Features
-
-* Food image classification using EfficientNet
-* Top-3 food predictions
-* AI calorie estimation using Gemini Vision
-* Modern Next.js frontend
-* FastAPI REST API backend
-* Nutrition analysis dashboard
-* Responsive UI
-* Real-time food analysis
-
----
-
 # System Architecture
 
-```text id="7m2q5v"
+```text
+User Upload Image
+        ↓
 Frontend (Next.js)
         ↓
 FastAPI Backend
         ↓
-EfficientNet Food Classifier
+EfficientNet Food Classification
         ↓
-Gemini Vision AI
+Top Food Predictions
         ↓
-Nutrition Estimation
+Gemini Vision Portion Estimation
+        ↓
+Estimated Weight (grams)
+        ↓
+Nutrition Calculation Engine
+        ↓
+Calories & Macronutrients
+        ↓
+Frontend Visualization
 ```
 
 ---
 
-# Tech Stack
+# Core Technologies
 
 ## Frontend
 
@@ -59,39 +51,94 @@ Nutrition Estimation
 ## Backend
 
 * FastAPI
-* TensorFlow / Keras
-* Pillow
-* Google Gemini API
+* Python
 
-## AI Models
+## Artificial Intelligence
 
-* EfficientNet
-* Gemini 2.5 Flash
+* EfficientNet (CNN)
+* Gemini 2.5 Flash (Vision-Language Model)
+
+## Image Processing
+
+* Pillow (PIL)
 
 ---
 
-# Project Structure
+# AI Pipeline
 
-```text id="3v8m1q"
-ai-food-calorie-system/
-│
-├── backend/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── classifier.py
-│   │   │   ├── gemini_service.py
-│   │   │   └── routes.py
-│   │   │
-│   │   ├── models/
-│   │   │   └── food_classifier.keras
-│   │   │
-│   │   └── main.py
-│   │
-│   ├── requirements.txt
-│   └── .env
-│
-└── frontend/
+## 1. Food Classification
+
+The uploaded image is processed using an EfficientNet-based CNN model.
+
+The model predicts:
+
+* food label
+* confidence score
+* top 3 food predictions
+
+Example:
+
+```json
+{
+  "food": "pizza",
+  "confidence": 0.37
+}
 ```
+
+---
+
+## 2. Portion Estimation
+
+The food image and top predictions are sent to Gemini Vision API.
+
+Gemini estimates:
+
+* actual food type
+* approximate edible weight (grams)
+
+Example:
+
+```json
+{
+  "food": "pizza",
+  "estimated_weight_g": 320
+}
+```
+
+---
+
+## 3. Nutrition Calculation
+
+The backend calculates calories and macronutrients using nutrition data per 100g.
+
+### Calories Formula
+
+Calories = (kcal_per_100g × weight_g) / 100
+
+### Protein Formula
+
+Protein = (protein_per_100g × weight_g) / 100
+
+### Carbohydrates Formula
+
+Carbs = (carbs_per_100g × weight_g) / 100
+
+### Fat Formula
+
+Fat = (fat_per_100g × weight_g) / 100
+
+---
+
+# Features
+
+* AI food recognition
+* Portion size estimation
+* Real-time calorie estimation
+* Nutrition analysis dashboard
+* Modern responsive UI
+* Top-3 prediction visualization
+* FastAPI REST API
+* AI-assisted nutrition reasoning
 
 ---
 
@@ -99,19 +146,19 @@ ai-food-calorie-system/
 
 ## Analyze Food
 
-```http id="5m2q8v"
-POST /analyze-food
-```
+POST `/analyze-food`
 
 ### Request
 
-```text id="8q1m4v"
+Content-Type:
+
+```text
 multipart/form-data
 ```
 
 Field:
 
-```text id="1m8q4v"
+```text
 file
 ```
 
@@ -119,7 +166,7 @@ file
 
 # Example Response
 
-```json id="6v2m7q"
+```json
 {
   "classifier_result": {
     "food": "pizza",
@@ -140,16 +187,45 @@ file
     ]
   },
 
-  "nutrition_result": {
+  "portion_result": {
     "food": "pizza",
-    "estimated_weight_g": 320,
-    "estimated_calories": 780,
-    "protein_g": 28,
-    "carbs_g": 72,
-    "fat_g": 35,
-    "confidence": 0.82
+    "estimated_weight_g": 320
+  },
+
+  "nutrition_result": {
+    "estimated_calories": 851.2,
+    "protein_g": 35.2,
+    "carbs_g": 105.6,
+    "fat_g": 32
   }
 }
+```
+
+---
+
+# Project Structure
+
+```text
+ai-food-calorie-system/
+│
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── classifier.py
+│   │   │   ├── gemini_service.py
+│   │   │   ├── nutrition_db.py
+│   │   │   ├── nutrition_calculator.py
+│   │   │   └── routes.py
+│   │   │
+│   │   ├── models/
+│   │   │   └── food_classifier.keras
+│   │   │
+│   │   └── main.py
+│   │
+│   ├── requirements.txt
+│   └── .env
+│
+└── frontend/
 ```
 
 ---
@@ -158,8 +234,8 @@ file
 
 ## Clone Repository
 
-```bash id="9q2m5v"
-git clone <your-repo-url>
+```bash
+git clone <repository-url>
 cd ai-food-calorie-system
 ```
 
@@ -167,7 +243,7 @@ cd ai-food-calorie-system
 
 # Backend Setup
 
-```bash id="4m7q1v"
+```bash
 cd backend
 
 python -m venv venv
@@ -177,31 +253,31 @@ venv\Scripts\activate
 
 Install dependencies:
 
-```bash id="2q7m5v"
+```bash
 pip install -r requirements.txt
 ```
 
 Create `.env` file:
 
-```env id="5m2q8v"
+```env
 GEMINI_API_KEY=your_api_key
 ```
 
 Run backend:
 
-```bash id="8q1m4v"
+```bash
 uvicorn app.main:app --reload
 ```
 
 Backend URL:
 
-```text id="1m8q4v"
+```text
 http://127.0.0.1:8000
 ```
 
 Swagger Docs:
 
-```text id="6v2m7q"
+```text
 http://127.0.0.1:8000/docs
 ```
 
@@ -209,7 +285,7 @@ http://127.0.0.1:8000/docs
 
 # Frontend Setup
 
-```bash id="9q2m5v"
+```bash
 cd frontend
 
 npm install
@@ -219,21 +295,8 @@ npm run dev
 
 Frontend URL:
 
-```text id="4m7q1v"
+```text
 http://localhost:3000
-```
-
----
-
-# AI Workflow
-
-```text id="2q7m5v"
-1. Upload food image
-2. EfficientNet predicts food type
-3. Top-3 predictions generated
-4. Gemini Vision analyzes image
-5. Calories and nutrition estimated
-6. Frontend displays results
 ```
 
 ---
@@ -245,35 +308,13 @@ http://localhost:3000
 * Depth estimation
 * Volume estimation
 * Nutrition tracking history
-* User authentication
-* Cloud deployment
 * Mobile application
-* Meal recommendation system
-
----
-
-# Screenshots
-
-Add your screenshots here.
-
----
-
-# License
-
-MIT License
+* Cloud deployment
 
 ---
 
 # Author
 
-Your Name
-
----
-
-# Acknowledgements
-
-* TensorFlow
-* FastAPI
-* Next.js
-* Google Gemini API
-* Food-101 Dataset
+Phan Minh Thang
+Bui Huynh Tuan Thanh
+Luu Tan Phat
