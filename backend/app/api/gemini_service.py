@@ -10,35 +10,31 @@ load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel("gemini-2.5-flash")
-def estimate_calories(image: Image.Image, food_prediction):
+def estimate_portion(image: Image.Image, food_prediction):
 
     prompt = f"""
-    You are a professional nutrition estimation AI.
+Analyze this food image.
 
-    Food classifier prediction:
+Possible food classes:
+- pizza
+- banh_trang_nuong
+- lasagna
 
-    {food_prediction}
+Estimate the approximate edible weight
+of the food in grams.
 
-    Analyze the food image carefully.
+Use realistic serving sizes.
 
-    Return ONLY valid raw JSON.
+Avoid extreme estimates.
 
-    Do NOT use markdown.
-    Do NOT explain.
-    Do NOT add extra text.
+Return ONLY JSON.
 
-    JSON schema:
-
-    {{
-        "food": "string",
-        "estimated_weight_g": number,
-        "estimated_calories": number,
-        "protein_g": number,
-        "carbs_g": number,
-        "fat_g": number,
-        "confidence": number
-    }}
-    """
+{{
+  "food": "string",
+  "estimated_weight_g": number
+  "confidence": number
+}}
+"""
 
     response = model.generate_content(
         [prompt, image]
@@ -58,13 +54,9 @@ def estimate_calories(image: Image.Image, food_prediction):
         print("Gemini JSON parse error:", e)
 
         result = {
-            "food": food_prediction.get("food", "unknown"),
-            "estimated_weight_g": 0,
-            "estimated_calories": 0,
-            "protein_g": 0,
-            "carbs_g": 0,
-            "fat_g": 0,
-            "confidence": 0
-        }
+    "food": food_prediction.get("food", "unknown"),
+    "estimated_weight_g": 0,
+    "confidence": 0
+}
 
     return result

@@ -2,9 +2,9 @@ from fastapi import APIRouter, UploadFile, File
 from PIL import Image
 import io
 import traceback
-from app.api.gemini_service import estimate_calories
+from app.api.gemini_service import estimate_portion
 from app.api.classifier import predict_food
-
+from app.api.nutrition_calculator import calculate_nutrition
 router = APIRouter()
 
 @router.post("/predict-food")
@@ -45,12 +45,20 @@ async def analyze_food(file: UploadFile = File(...)):
 
     prediction = predict_food(image)
 
-    nutrition = estimate_calories(
-        image=image,
-        food_prediction=prediction
-    )
-
+    portion = estimate_portion(
+    image=image,
+    food_prediction=prediction
+)   
+    nutrition = calculate_nutrition(
+    food=portion["food"],
+    weight=portion["estimated_weight_g"]
+)
+    
     return {
-        "classifier_result": prediction,
-        "nutrition_result": nutrition
-    }
+
+    "classifier_result": prediction,
+
+    "portion_result": portion,
+
+    "nutrition_result": nutrition
+}

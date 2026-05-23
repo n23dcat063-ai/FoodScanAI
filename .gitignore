@@ -1,0 +1,13 @@
+# Virtual Environment
+venv/
+env/
+.venv/
+.env
+.env.*
+venv/
+node_modules/
+.next/
+.env
+
+__pycache__/
+*.pyc
