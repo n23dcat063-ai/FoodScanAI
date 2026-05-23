@@ -3,6 +3,8 @@ from app.api.nutrition_db import NUTRITION_DB
 
 def calculate_nutrition(food, weight):
 
+    food = food.lower().replace(" ", "_")
+
     if food not in NUTRITION_DB:
 
         return {
